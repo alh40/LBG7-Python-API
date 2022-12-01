@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   flask-app:
-    image: alex/flask-app:latest
+    image: alh40/alh401/alex/flask-app:latest
     build: ./
   nginx:
     image: nginx:latest
