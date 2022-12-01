@@ -1,5 +1,6 @@
 #!/bin/bash
-
+docker stop auto-container
+docker rm auto-container
 docker build -t lbgapp .
 docker push lbgapp
 
