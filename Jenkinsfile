@@ -10,9 +10,17 @@ pipeline {
         }
         stage('Push') {
             steps {
-                sh '''
-                docker-compose push
-                '''
+                
+                withCredentials([usernamePassword( credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]){
+                    def registry_URL = "https://hub.docker.com/repository/docker/"
+                    bat "docker login -u $USER -p $PASSWORD ${registry_URL}"
+                    docker.withRegistry("http://${registry_URL}", "dockerhub"){
+                        sh '''
+                        docker-compose push
+                        '''
+                    }
+                }
+                
             }
         }
         stage('Deploy') {
