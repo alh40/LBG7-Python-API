@@ -4,7 +4,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                docker build -t grc.io/lgbapp/pythonapp
+                docker build -t grc.io/lgbapp/pythonapp .
                 docker push gcr.io/lbgapp/pythonapp
                 '''
             }
