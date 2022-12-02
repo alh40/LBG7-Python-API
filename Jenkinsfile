@@ -11,8 +11,8 @@ pipeline {
         stage('Push') {
             steps {
                 
-                withRegistry([ credentialsId: "dockerhub", url: ""]){
-                    bat "docker-compose push"
+                withDockerRegistry([ credentialsId: "dockerhub", url: ""]){
+                    sh "docker-compose push"
                 }      
                 
             }
