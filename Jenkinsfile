@@ -4,34 +4,18 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                docker-compose build
+                docker build -t grc.io/lgbapp/pythonapp
+                docker push gcr.io/lbgapp/pythonapp
                 '''
-            }
-        }
-        stage('Push') {
-            steps {
-                
-                withDockerRegistry([ credentialsId: "dockerhub", url: ""]){
-                    sh "docker-compose push"
-                }      
-                
             }
         }
         stage('Deploy') {
             steps {
                 sh '''
-                rm -rf LBG7-Python-API
-                git clone git@github.com:alh40/LBG7-Python-API.git
-                cd LBG7-Python-API
-                docker-compose down
-                docker-compose up -d
-                '''
-            }
-        }
-        stage('Clean Up') {
-            steps {
-                sh '''
-                docker system prune --force
+                kubectl apply -f ./kubernetes/application.yml
+                kubectl apply -f ./kubernetes/nginx.yml
+                kubectl rollout restart deployment pythonapp
+                kubectl rollout restart deployment nginx
                 '''
             }
         }
